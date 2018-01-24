@@ -207,11 +207,6 @@ type sendMessage struct {
 
 // 发送消息
 func (bot *BotExt) sendMessage(request *sendMessage) (*types.Message, error) {
-	res, err := bot.Call("sendMessage", request)
-	if err != nil {
-		return nil, err
-	}
-
 	if request.ReplyMarkup != nil {
 		switch real := request.ReplyMarkup.(type) {
 		case *InlineKeyboardMarkup:
@@ -229,6 +224,11 @@ func (bot *BotExt) sendMessage(request *sendMessage) (*types.Message, error) {
 		default:
 			request.ReplyMarkup = nil
 		}
+	}
+
+	res, err := bot.Call("sendMessage", request)
+	if err != nil {
+		return nil, err
 	}
 
 	resonpe := SendMessageResonpe{}

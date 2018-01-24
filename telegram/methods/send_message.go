@@ -2,6 +2,7 @@ package methods
 
 import (
 	"encoding/json"
+	"reflect"
 
 	"github.com/zhangpanyi/basebot/telegram/types"
 )
@@ -207,25 +208,6 @@ type sendMessage struct {
 
 // 发送消息
 func (bot *BotExt) sendMessage(request *sendMessage) (*types.Message, error) {
-	if request.ReplyMarkup != nil {
-		switch real := request.ReplyMarkup.(type) {
-		case *InlineKeyboardMarkup:
-			if real != nil {
-				request.ReplyMarkup = real
-			}
-		case *ReplyKeyboardMarkup:
-			if real != nil {
-				request.ReplyMarkup = real
-			}
-		case *ReplyKeyboardRemove:
-			if real != nil {
-				request.ReplyMarkup = real
-			}
-		default:
-			request.ReplyMarkup = nil
-		}
-	}
-
 	res, err := bot.Call("sendMessage", request)
 	if err != nil {
 		return nil, err
@@ -243,12 +225,15 @@ func (bot *BotExt) sendMessage(request *sendMessage) (*types.Message, error) {
 func (bot *BotExt) SendMessage(chatID int64, text string, mdMode bool,
 	markup interface{}) (*types.Message, error) {
 	request := sendMessage{
-		ChatID:      chatID,
-		Text:        text,
-		ReplyMarkup: markup,
+		ChatID: chatID,
+		Text:   text,
 	}
+
 	if mdMode {
 		request.ParseMode = ParseModeMarkdown
+	}
+	if markup != nil && !reflect.ValueOf(markup).IsNil() {
+		request.ReplyMarkup = markup
 	}
 	return bot.sendMessage(&request)
 }
@@ -260,10 +245,13 @@ func (bot *BotExt) ReplyMessage(message *types.Message, text string, mdMode bool
 		ChatID:           message.Chat.ID,
 		Text:             text,
 		ReplyToMessageID: message.MessageID,
-		ReplyMarkup:      markup,
 	}
+
 	if mdMode {
 		request.ParseMode = ParseModeMarkdown
+	}
+	if markup != nil && !reflect.ValueOf(markup).IsNil() {
+		request.ReplyMarkup = markup
 	}
 	return bot.sendMessage(&request)
 }
@@ -275,10 +263,13 @@ func (bot *BotExt) SendMessageDisableWebPagePreview(chatID int64, text string, m
 		ChatID: chatID,
 		Text:   text,
 		DisableWebPagePreview: true,
-		ReplyMarkup:           markup,
 	}
+
 	if mdMode {
 		request.ParseMode = ParseModeMarkdown
+	}
+	if markup != nil && !reflect.ValueOf(markup).IsNil() {
+		request.ReplyMarkup = markup
 	}
 	return bot.sendMessage(&request)
 }
@@ -291,10 +282,13 @@ func (bot *BotExt) ReplyMessageDisableWebPagePreview(message *types.Message, tex
 		Text:                  text,
 		ReplyToMessageID:      message.MessageID,
 		DisableWebPagePreview: true,
-		ReplyMarkup:           markup,
 	}
+
 	if mdMode {
 		request.ParseMode = ParseModeMarkdown
+	}
+	if markup != nil && !reflect.ValueOf(markup).IsNil() {
+		request.ReplyMarkup = markup
 	}
 	return bot.sendMessage(&request)
 }

@@ -1,8 +1,9 @@
 package methods
 
 import (
-	"basebot/telegram/types"
 	"encoding/json"
+
+	"github.com/zhangpanyi/basebot/telegram/types"
 )
 
 // 获取更新

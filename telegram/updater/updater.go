@@ -40,11 +40,7 @@ func NewUpdater(domain string, apiwebsite string) (*Updater, error) {
 		handlers:    make(map[string]Handler),
 		bots:        make(map[string]methods.BotExt),
 	}
-	pool, err := NewPool(2048)
-	if err != nil {
-		return nil, err
-	}
-	updater.pool = pool
+	updater.pool = NewPool(2048)
 	return &updater, nil
 }
 

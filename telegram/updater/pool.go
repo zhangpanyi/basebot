@@ -6,19 +6,18 @@ import (
 
 // Pool 工作队列
 type Pool struct {
-	pool *tunny.WorkPool
+	pool *tunny.Pool
 }
 
 // NewPool 创建工作队列
-func NewPool(numWorkers int) (*Pool, error) {
-	pool, err := tunny.CreatePoolGeneric(numWorkers).Open()
-	if err != nil {
-		return nil, err
-	}
-	return &Pool{pool: pool}, nil
+func NewPool(numWorkers int) *Pool {
+	pool := tunny.NewFunc(numWorkers, func(payload interface{}) interface{} {
+		return nil
+	})
+	return &Pool{pool: pool}
 }
 
 // Async 添加异步任务
 func (pool *Pool) Async(jobData interface{}) {
-	pool.pool.SendWorkAsync(jobData, nil)
+	go pool.pool.Process(jobData)
 }

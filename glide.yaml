@@ -1,0 +1,18 @@
+package: github.com/zhangpanyi/basebot
+import:
+- package: github.com/Jeffail/tunny
+  version: 0.1.0
+- package: github.com/rifflock/lfshook
+  version: v2.2
+- package: github.com/senlinms/logrus
+  version: v0.11.2
+- package: github.com/sirupsen/logrus
+  version: v1.0.4
+- package: gopkg.in/natefinch/lumberjack.v2
+  version: v2.1
+- package: golang.org/x/sys
+  subpackages:
+  - unix
+- package: golang.org/x/crypto
+  subpackages:
+  - ssh/terminal

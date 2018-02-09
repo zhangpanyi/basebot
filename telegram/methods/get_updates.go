@@ -8,6 +8,7 @@ import (
 
 // 获取更新
 type getUpdates struct {
+	Offset  uint32 `json:"offset"`  // 偏移
 	Timeout uint32 `json:"timeout"` // 超时时间
 }
 
@@ -18,8 +19,9 @@ type getUpdatesResonpe struct {
 }
 
 // GetUpdates 获取更新
-func (bot *BotExt) GetUpdates(timeout uint32) ([]*types.Update, error) {
+func (bot *BotExt) GetUpdates(timeout, offset uint32) ([]*types.Update, error) {
 	request := getUpdates{
+		Offset:  offset,
 		Timeout: timeout,
 	}
 	data, err := bot.Call("getUpdates", &request)

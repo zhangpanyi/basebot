@@ -3,13 +3,13 @@ package updater
 import (
 	"crypto/tls"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"regexp"
 	"sync"
 
+	"github.com/gorilla/mux"
 	"github.com/zhangpanyi/basebot/telegram/methods"
 	"github.com/zhangpanyi/basebot/telegram/types"
 )
@@ -36,11 +36,16 @@ func NewUpdater(domain string, apiwebsite string) (*Updater, error) {
 		domain:      domain,
 		apiwebsite:  apiwebsite,
 		certificate: certificate,
+		router:      mux.NewRouter(),
 		queue:       NewQueue(1024),
+		pool:        NewPool(2048),
 		handlers:    make(map[string]Handler),
 		bots:        make(map[string]methods.BotExt),
 	}
-	updater.pool = NewPool(2048)
+
+	// 注册路由
+	pattern := "/{id[0-9]+}:{nonce}/"
+	updater.router.HandleFunc(pattern, updater.handleFunc)
 	return &updater, nil
 }
 
@@ -52,7 +57,7 @@ type Updater struct {
 	domain        string                    // 服务域名
 	apiwebsite    string                    // 机器人API服务网址
 	certificate   []byte                    // 证书信息
-	router        http.ServeMux             // 路由器
+	router        *mux.Router               // 路由器
 	bots          map[string]methods.BotExt // 机器人信息
 	botMutex      sync.RWMutex              // 机器人信息锁
 	handlers      map[string]Handler        // Token处理模块
@@ -62,8 +67,8 @@ type Updater struct {
 }
 
 // GetRouter 获取路由器
-func (updater *Updater) GetRouter() *http.ServeMux {
-	return &updater.router
+func (updater *Updater) GetRouter() http.Handler {
+	return updater.router
 }
 
 // AddHandler 添加处理模块
@@ -91,10 +96,6 @@ func (updater *Updater) AddHandler(token string, handler Handler) (*methods.BotE
 	updater.handlersMutex.Lock()
 	updater.handlers[token] = handler
 	updater.handlersMutex.Unlock()
-
-	// 注册路由
-	pattern := fmt.Sprintf("/%s/", token)
-	updater.router.HandleFunc(pattern, updater.handleFunc)
 	return bot, nil
 }
 
@@ -110,16 +111,15 @@ func (updater *Updater) RemoveHandler(token string) {
 	delete(updater.handlers, token)
 	updater.handlersMutex.Unlock()
 
-	// 注销路由
-	pattern := fmt.Sprintf("/%s/", token)
-	updater.router.HandleFunc(pattern, nil)
+	// 删除webhook
+	methods.DelWebhook(updater.apiwebsite, token)
 }
 
 // ListenAndServe 监听并服务
 func (updater *Updater) ListenAndServe(addr string) error {
 	s := &http.Server{
 		Addr:    addr,
-		Handler: &updater.router,
+		Handler: updater.router,
 		TLSConfig: &tls.Config{
 			ClientAuth: tls.NoClientCert,
 		},

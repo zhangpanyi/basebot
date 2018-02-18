@@ -1,6 +1,8 @@
 package updater
 
 import (
+	"log"
+
 	"github.com/Jeffail/tunny"
 )
 
@@ -12,6 +14,12 @@ type Pool struct {
 // NewPool 创建工作队列
 func NewPool(numWorkers int) *Pool {
 	pool := tunny.NewFunc(numWorkers, func(payload interface{}) interface{} {
+		defer func() {
+			if err := recover(); err != nil {
+				log.Printf("Pool goroutine recoverd, %v\n", err)
+			}
+		}()
+
 		callback, ok := payload.(func())
 		if ok {
 			callback()

@@ -67,7 +67,7 @@ type Updater struct {
 }
 
 // GetRouter 获取路由器
-func (updater *Updater) GetRouter() http.Handler {
+func (updater *Updater) GetRouter() *mux.Router {
 	return updater.router
 }
 

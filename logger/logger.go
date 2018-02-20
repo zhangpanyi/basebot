@@ -1,7 +1,6 @@
 package logger
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -135,7 +134,6 @@ type logger struct {
 
 // 获取可用的日志记录器
 func (lg *logger) available(level logrus.Level) *logrus.Logger {
-	fmt.Println(level, lg.fileLevel)
 	if level <= lg.fileLevel {
 		return lg.file
 	}

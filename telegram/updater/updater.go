@@ -1,12 +1,14 @@
 package updater
 
 import (
+	"fmt"
 	"crypto/tls"
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"regexp"
+	"strconv"
 	"sync"
 
 	"github.com/gorilla/mux"
@@ -26,13 +28,14 @@ func init() {
 }
 
 // NewUpdater 创建更新器
-func NewUpdater(domain string, apiwebsite string) (*Updater, error) {
+func NewUpdater(port int, domain string, apiwebsite string) (*Updater, error) {
 	certificate, err := ioutil.ReadFile("certs/server.crt")
 	if err != nil {
 		return nil, err
 	}
 
 	updater := Updater{
+		port: 		 port,
 		domain:      domain,
 		apiwebsite:  apiwebsite,
 		certificate: certificate,
@@ -55,6 +58,7 @@ type Handler func(bot *methods.BotExt, update *types.Update)
 // Updater 更新器
 type Updater struct {
 	domain        string                    // 服务域名
+	port          int                       // 监听端口号
 	apiwebsite    string                    // 机器人API服务网址
 	certificate   []byte                    // 证书信息
 	router        *mux.Router               // 路由器
@@ -80,8 +84,8 @@ func (updater *Updater) AddHandler(token string, handler Handler) (*methods.BotE
 	}
 
 	// 重设webhhok
-	url := "https://" + updater.domain + "/" + token + "/"
 	allowedUpdates := [...]string{"message", "callback_query"}
+	url := "https://" + updater.domain + ":" + strconv.Itoa(updater.port) + "/" + token + "/"
 	err = bot.SetWebhook(url, updater.certificate, 40, allowedUpdates[:])
 	if err != nil {
 		return nil, err
@@ -116,7 +120,8 @@ func (updater *Updater) RemoveHandler(token string) {
 }
 
 // ListenAndServe 监听并服务
-func (updater *Updater) ListenAndServe(addr string) error {
+func (updater *Updater) ListenAndServe() error {
+	addr := fmt.Sprintf(":%d", updater.port)
 	s := &http.Server{
 		Addr:    addr,
 		Handler: updater.router,

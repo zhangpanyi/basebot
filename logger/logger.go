@@ -135,7 +135,7 @@ type logger struct {
 
 // 获取可用的日志记录器
 func (lg *logger) available(level log.Level) *log.Logger {
-	if level >= lg.fileLevel {
+	if level < lg.fileLevel {
 		return lg.file
 	}
 	return lg.console

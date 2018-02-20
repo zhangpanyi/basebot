@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -10,8 +11,7 @@ import (
 	lumberjack "gopkg.in/natefinch/lumberjack.v2"
 
 	"github.com/rifflock/lfshook"
-	"github.com/senlinms/logrus"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -35,107 +35,108 @@ func CreateLoggerOnce(level, filelevel uint8) {
 		globalLogger = &logger{
 			file:      newLoggerOfLFShook(1048576000, 100, 365, path),
 			console:   newLoggerOfConsole(),
-			fileLevel: log.Level(level),
+			fileLevel: logrus.Level(filelevel),
 		}
-		globalLogger.console.SetLevel(log.Level(level))
-		globalLogger.file.SetLevel(log.Level(filelevel))
+		globalLogger.console.SetLevel(logrus.Level(level))
+		globalLogger.file.SetLevel(logrus.Level(filelevel))
 	})
 }
 
 // Debug 输出Debug日志
 func Debug(v ...interface{}) {
 	if globalLogger != nil {
-		globalLogger.available(log.DebugLevel).Debug(v)
+		globalLogger.available(logrus.DebugLevel).Debug(v)
 	}
 }
 
 // Debugf 格式化输出Debug日志
 func Debugf(format string, params ...interface{}) {
 	if globalLogger != nil {
-		globalLogger.available(log.DebugLevel).Debugf(format, params...)
+		globalLogger.available(logrus.DebugLevel).Debugf(format, params...)
 	}
 }
 
 // Info 输出Info日志
 func Info(v ...interface{}) {
 	if globalLogger != nil {
-		globalLogger.available(log.InfoLevel).Info(v)
+		globalLogger.available(logrus.InfoLevel).Info(v)
 	}
 }
 
 // Infof 格式化输出Info日志
 func Infof(format string, params ...interface{}) {
 	if globalLogger != nil {
-		globalLogger.available(log.InfoLevel).Infof(format, params...)
+		globalLogger.available(logrus.InfoLevel).Infof(format, params...)
 	}
 }
 
 // Warn 输出Warn日志
 func Warn(v ...interface{}) {
 	if globalLogger != nil {
-		globalLogger.available(log.WarnLevel).Warn(v)
+		globalLogger.available(logrus.WarnLevel).Warn(v)
 	}
 }
 
 // Warnf 格式化输出Warn日志
 func Warnf(format string, params ...interface{}) {
 	if globalLogger != nil {
-		globalLogger.available(log.WarnLevel).Warnf(format, params...)
+		globalLogger.available(logrus.WarnLevel).Warnf(format, params...)
 	}
 }
 
 // Error 输出Error日志
 func Error(v ...interface{}) {
 	if globalLogger != nil {
-		globalLogger.available(log.ErrorLevel).Error(v)
+		globalLogger.available(logrus.ErrorLevel).Error(v)
 	}
 }
 
 // Errorf 格式化输出Error日志
 func Errorf(format string, params ...interface{}) {
 	if globalLogger != nil {
-		globalLogger.available(log.ErrorLevel).Errorf(format, params...)
+		globalLogger.available(logrus.ErrorLevel).Errorf(format, params...)
 	}
 }
 
 // Fatal 输出Fatal日志
 func Fatal(v ...interface{}) {
 	if globalLogger != nil {
-		globalLogger.available(log.FatalLevel).Fatal(v)
+		globalLogger.available(logrus.FatalLevel).Fatal(v)
 	}
 }
 
 // Fatalf 格式化输出Fatal日志
 func Fatalf(format string, params ...interface{}) {
 	if globalLogger != nil {
-		globalLogger.available(log.FatalLevel).Fatalf(format, params...)
+		globalLogger.available(logrus.FatalLevel).Fatalf(format, params...)
 	}
 }
 
 // Panic 输出Panic日志
 func Panic(v ...interface{}) {
 	if globalLogger != nil {
-		globalLogger.available(log.PanicLevel).Panic(v)
+		globalLogger.available(logrus.PanicLevel).Panic(v)
 	}
 }
 
 // Panicf 格式化输出Panic日志
 func Panicf(format string, params ...interface{}) {
 	if globalLogger != nil {
-		globalLogger.available(log.PanicLevel).Panicf(format, params...)
+		globalLogger.available(logrus.PanicLevel).Panicf(format, params...)
 	}
 }
 
 // 日志选项
 type logger struct {
-	file      *log.Logger // 文件日志
-	console   *log.Logger // 控制台日志
-	fileLevel log.Level   // 文件日志级别
+	file      *logrus.Logger // 文件日志
+	console   *logrus.Logger // 控制台日志
+	fileLevel logrus.Level   // 文件日志级别
 }
 
 // 获取可用的日志记录器
-func (lg *logger) available(level log.Level) *log.Logger {
-	if level < lg.fileLevel {
+func (lg *logger) available(level logrus.Level) *logrus.Logger {
+	fmt.Println(level, lg.fileLevel)
+	if level <= lg.fileLevel {
 		return lg.file
 	}
 	return lg.console
@@ -145,19 +146,20 @@ var once sync.Once
 var globalLogger *logger
 
 // 创建终端记录器
-func newLoggerOfConsole() *log.Logger {
-	lg := log.New()
-	for _, level := range log.AllLevels {
+func newLoggerOfConsole() *logrus.Logger {
+	lg := logrus.New()
+	for _, level := range logrus.AllLevels {
 		lg.Level |= level
 	}
+	lg.Formatter = &logrus.JSONFormatter{}
 	return lg
 }
 
 // 创建文件记录器
-func newLoggerOfLFShook(maxsize int, maxbackup int, maxage int, path string) *log.Logger {
-	lg := log.New()
+func newLoggerOfLFShook(maxsize int, maxbackup int, maxage int, path string) *logrus.Logger {
+	lg := logrus.New()
 	writerMap := lfshook.WriterMap{}
-	for _, level := range log.AllLevels {
+	for _, level := range logrus.AllLevels {
 		lg.Level |= level
 		writer := &lumberjack.Logger{
 			Filename:   path + level.String() + ".log",
@@ -167,7 +169,7 @@ func newLoggerOfLFShook(maxsize int, maxbackup int, maxage int, path string) *lo
 		}
 		writerMap[level] = writer
 	}
-	lg.Formatter = &log.JSONFormatter{}
+	lg.Formatter = &logrus.JSONFormatter{}
 	lg.Hooks.Add(lfshook.NewHook(writerMap, nil))
 	return lg
 }

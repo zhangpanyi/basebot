@@ -21,20 +21,33 @@ type InlineQueryResult interface {
 	SetType()
 }
 
-// InlineQueryResultPhoto 照片结果
-type InlineQueryResultPhoto struct {
-	Type        string `json:"type"`                  // 结果类型
-	ID          string `json:"id"`                    // 结果ID
-	PhotoURL    string `json:"photo_url"`             // 照片地址
-	ThumbURL    string `json:"thumb_url"`             // 缩略图地址
-	Title       string `json:"title,omitempty"`       // 标题
-	Description string `json:"description,omitempty"` // 描述
-	Caption     string `json:"caption,omitempty"`     // 说明文字
-	ParseMode   string `json:"parse_mode,omitempty"`  // 解析模式
+// 输入消息内容接口
+type InputMessageContent interface{}
+
+// 输入文本消息内容
+type InputTextMessageContent struct {
+	MessageText           string `json:"message_text"`             // 消息文本
+	ParseMode             string `json:"parse_mode"`               // 解析模式
+	DisableWebPagePreview bool   `json:"disable_web_page_preview"` // 禁用页面预览
 }
 
-func (result *InlineQueryResultPhoto) SetType() {
-	result.Type = "photo"
+// InlineQueryResultArticle 文章结果
+type InlineQueryResultArticle struct {
+	Type                string              `json:"type"`                   // 结果类型
+	ID                  string              `json:"id"`                     // 结果ID
+	Title               string              `json:"title"`                  // 标题
+	InputMessageContent InputMessageContent `json:"input_message_content"`  // 消息内容
+	Description         string              `json:"description,omitempty"`  // 描述
+	URL                 string              `json:"url,omitempty"`          // 地址
+	HideURL             bool                `json:"hide_url,omitempty"`     // 隐藏地址
+	ThumbURL            string              `json:"thumb_url,omitempty"`    // 缩略图地址
+	ThumbWidth          int32               `json:"thumb_width,omitempty"`  // 缩略图宽度
+	ThumbHeight         int32               `json:"thumb_height,omitempty"` // 缩略图高度
+}
+
+// SetType 设置类型
+func (result *InlineQueryResultArticle) SetType() {
+	result.Type = "article"
 }
 
 // AnswerInlineQuery 应答内联查询

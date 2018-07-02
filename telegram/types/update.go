@@ -9,6 +9,7 @@ type Update struct {
 	UpdateID      int32          `json:"update_id"`                // 更新ID
 	Message       *Message       `json:"message,omitempty"`        // 消息
 	CallbackQuery *CallbackQuery `json:"callback_query,omitempty"` // 查询回调
+	InlineQuery   *InlineQuery   `json:"inline_query,omitempty"`   // 内联回调
 }
 
 // ToJSON 转换为JSON

@@ -84,7 +84,7 @@ func (updater *Updater) AddHandler(token string, handler Handler) (*methods.BotE
 	}
 
 	// 重设webhhok
-	allowedUpdates := [...]string{"message", "callback_query"}
+	allowedUpdates := [...]string{"message", "callback_query", "inline_query"}
 	url := "https://" + updater.domain + ":" + strconv.Itoa(updater.port) + "/" + token + "/"
 	err = bot.SetWebhook(url, updater.certificate, 40, allowedUpdates[:])
 	if err != nil {

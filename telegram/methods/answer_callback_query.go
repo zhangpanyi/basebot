@@ -6,7 +6,7 @@ import (
 
 // 应答查询回调
 type answerCallbackQuery struct {
-	CallbackQueryID string `json:"callback_query_id"`    // 查询回调的唯一ID
+	CallbackQueryID string `json:"callback_query_id"`    // 回调查询唯一ID
 	Text            string `json:"text,omitempty"`       // 通知文本
 	ShowAlert       bool   `json:"show_alert,omitempty"` // 显示警告
 	URL             string `json:"url,omitempty"`        // 打开URL

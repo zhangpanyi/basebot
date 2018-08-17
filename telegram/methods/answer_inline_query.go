@@ -55,7 +55,7 @@ func (bot *BotExt) AnswerInlineQuery(query *types.InlineQuery, offset, cacheTime
 	request := answerInlineQuery{
 		InlineQueryID: query.ID,
 		CacheTime:     cacheTime,
-		IsPersonal:    false,
+		IsPersonal:    true,
 		NextOffset:    strconv.FormatInt(int64(offset), 10),
 	}
 

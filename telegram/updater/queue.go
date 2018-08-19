@@ -9,12 +9,12 @@ import (
 	"github.com/zhangpanyi/basebot/telegram/types"
 )
 
-// Queue 消息队列
+// 消息队列
 type Queue struct {
 	workers []*worker
 }
 
-// NewQueue 创建消息队列
+// 创建消息队列
 func NewQueue(numWorkers uint32) *Queue {
 	var i uint32
 	queue := Queue{workers: make([]*worker, 0, numWorkers)}
@@ -28,7 +28,7 @@ func NewQueue(numWorkers uint32) *Queue {
 	return &queue
 }
 
-// Put 添加更新
+// 添加更新
 func (queue *Queue) Put(f future) {
 	idx := f.bot.ID % int64(len(queue.workers))
 	queue.workers[idx].put(f)

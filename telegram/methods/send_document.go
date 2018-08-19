@@ -13,10 +13,10 @@ type sendDocument struct {
 	Document         string      `json:"document"`                      // 文件ID
 	Caption          string      `json:"caption"`                       // 文件标题
 	ReplyToMessageID int32       `json:"reply_to_message_id,omitempty"` // 回复消息ID
-	ReplyMarkup      interface{} `json:"reply_markup,omitempty"`        // 回复标记
+	ReplyMarkup      interface{} `json:"reply_markup,omitempty"`        // Reply Markup
 }
 
-// SendDocument 发送文档
+// 发送文档
 func (bot *BotExt) SendDocument(chatID int64, caption string, fileID string,
 	markup *InlineKeyboardMarkup) (*types.Message, error) {
 
@@ -44,7 +44,7 @@ func (bot *BotExt) SendDocument(chatID int64, caption string, fileID string,
 	return resonpe.Result, nil
 }
 
-// SendDocumentFile 发送文档文件
+// 发送文档文件
 func (bot *BotExt) SendDocumentFile(chatID int64, caption string, file []byte,
 	filename string, markup *InlineKeyboardMarkup) (*types.Message, error) {
 

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-// Message 消息信息
+// 消息信息
 type Message struct {
 	MessageID            int32            `json:"message_id"`                        // 消息唯一ID
 	From                 *User            `json:"from,omitempty"`                    // 消息来源
@@ -28,12 +28,12 @@ type Message struct {
 	Contact              *Contact         `json:"contact,omitempty"`                 // 联系人
 }
 
-// ToJSON 转换为JSON
+// 转换为JSON
 func (message *Message) ToJSON() ([]byte, error) {
 	return json.Marshal(message)
 }
 
-// FromJSON 从JSON反序列化
+// 从JSON反序列化
 func (message *Message) FromJSON(jsb []byte) error {
 	return json.Unmarshal(jsb, message)
 }

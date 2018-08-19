@@ -2,7 +2,7 @@ package types
 
 import "encoding/json"
 
-// Sticker 贴纸信息
+// 贴纸信息
 type Sticker struct {
 	FileID   string     `json:"file_id"`             // 文件ID
 	Width    uint32     `json:"width"`               // 宽度
@@ -13,7 +13,7 @@ type Sticker struct {
 	FileSize uint32     `json:"file_size,omitempty"` // 文件大小
 }
 
-// StickerSet 贴纸集合
+// 贴纸集合
 type StickerSet struct {
 	Name          string     `json:"name"`                     // 集合名称
 	Title         string     `json:"title"`                    // 集合标题
@@ -21,12 +21,12 @@ type StickerSet struct {
 	Stickers      []*Sticker `json:"stickers"`                 // 贴纸列表
 }
 
-// ToJSON 转换为JSON
+// 转换为JSON
 func (set *StickerSet) ToJSON() ([]byte, error) {
 	return json.Marshal(set)
 }
 
-// FromJSON 从JSON反序列化
+// 从JSON反序列化
 func (set *StickerSet) FromJSON(jsb []byte) error {
 	return json.Unmarshal(jsb, set)
 }

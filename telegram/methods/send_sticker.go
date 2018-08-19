@@ -12,10 +12,10 @@ type sendSticker struct {
 	ChatID           int64       `json:"chat_id"`                       // 聊天ID
 	Sticker          string      `json:"sticker"`                       // 文件ID
 	ReplyToMessageID int32       `json:"reply_to_message_id,omitempty"` // 回复消息ID
-	ReplyMarkup      interface{} `json:"reply_markup,omitempty"`        // 回复标记
+	ReplyMarkup      interface{} `json:"reply_markup,omitempty"`        // Reply Markup
 }
 
-// SendSticker 发送贴纸
+// 发送贴纸
 func (bot *BotExt) SendSticker(chatID int64, fileID string,
 	markup *InlineKeyboardMarkup) (*types.Message, error) {
 
@@ -42,7 +42,7 @@ func (bot *BotExt) SendSticker(chatID int64, fileID string,
 	return resonpe.Result, nil
 }
 
-// SendStickerFile 发送贴纸文件
+// 发送贴纸文件
 func (bot *BotExt) SendStickerFile(chatID int64, file []byte,
 	markup *InlineKeyboardMarkup) (*types.Message, error) {
 

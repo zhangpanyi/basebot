@@ -25,7 +25,7 @@ type getFileResonpe struct {
 	Result *fileInfo `json:"result"` // 文件信息
 }
 
-// GetFile 获取文件
+// 获取文件
 func (bot *BotExt) GetFile(fileID string) ([]byte, error) {
 	// 获取文件路径
 	request := getFile{

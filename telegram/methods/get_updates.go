@@ -18,7 +18,7 @@ type getUpdatesResonpe struct {
 	Result []*types.Update `json:"result,omitempty"` // 更新列表
 }
 
-// GetUpdates 获取更新
+// 获取更新
 func (bot *BotExt) GetUpdates(timeout, offset uint32) ([]*types.Update, error) {
 	request := getUpdates{
 		Offset:  offset,

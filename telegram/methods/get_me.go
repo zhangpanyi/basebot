@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// GetMe 获取机器人信息
+// 获取机器人信息
 func GetMe(apiwebsite, token string) (*BotExt, error) {
 	res, err := http.Get(apiwebsite + "bot" + token + "/getme")
 	if err != nil {

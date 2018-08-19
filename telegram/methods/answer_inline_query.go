@@ -52,12 +52,19 @@ func (result *InlineQueryResultArticle) SetType() {
 }
 
 // 应答内联查询
-func (bot *BotExt) AnswerInlineQuery(query *types.InlineQuery, offset, cacheTime int32, results []InlineQueryResult) error {
+func (bot *BotExt) AnswerInlineQuery(query *types.InlineQuery, offset *int32, cacheTime int32,
+	results []InlineQueryResult) error {
+
+	nextOffset := ""
+	if offset != nil {
+		strconv.FormatInt(int64(*offset), 10)
+	}
+
 	request := answerInlineQuery{
 		InlineQueryID: query.ID,
 		CacheTime:     cacheTime,
 		IsPersonal:    true,
-		NextOffset:    strconv.FormatInt(int64(offset), 10),
+		NextOffset:    nextOffset,
 	}
 
 	if results != nil && !reflect.ValueOf(results).IsNil() {

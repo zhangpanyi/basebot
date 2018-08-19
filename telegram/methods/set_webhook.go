@@ -13,7 +13,7 @@ type setWebhook struct {
 	AllowedUpdates []string `json:"allowed_updates"` // 允许更新类型
 }
 
-// SetWebhook 设置webhook
+// 设置webhook
 func (bot *BotExt) SetWebhook(url string, certificate []byte, maxConnections int32,
 	allowedUpdates []string) error {
 	// 生成请求内容

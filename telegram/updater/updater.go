@@ -27,7 +27,7 @@ func init() {
 	}
 }
 
-// NewUpdater 创建更新器
+// 创建更新器
 func NewUpdater(port int, domain string, apiwebsite string) (*Updater, error) {
 	certificate, err := ioutil.ReadFile("certs/server.crt")
 	if err != nil {
@@ -52,10 +52,10 @@ func NewUpdater(port int, domain string, apiwebsite string) (*Updater, error) {
 	return &updater, nil
 }
 
-// Handler 处理函数
+// 处理函数
 type Handler func(bot *methods.BotExt, update *types.Update)
 
-// Updater 更新器
+// 更新器
 type Updater struct {
 	domain        string                    // 服务域名
 	port          int                       // 监听端口号
@@ -70,12 +70,12 @@ type Updater struct {
 	queue         *Queue                    // 消息队列
 }
 
-// GetRouter 获取路由器
+// 获取路由器
 func (updater *Updater) GetRouter() *mux.Router {
 	return updater.router
 }
 
-// AddHandler 添加处理模块
+// 添加处理模块
 func (updater *Updater) AddHandler(token string, handler Handler) (*methods.BotExt, error) {
 	// 获取机器人
 	bot, err := methods.GetMe(updater.apiwebsite, token)
@@ -103,7 +103,7 @@ func (updater *Updater) AddHandler(token string, handler Handler) (*methods.BotE
 	return bot, nil
 }
 
-// RemoveHandler 移除处理模块
+// 移除处理模块
 func (updater *Updater) RemoveHandler(token string) {
 	// 删除机器人
 	updater.botMutex.Lock()
@@ -119,7 +119,7 @@ func (updater *Updater) RemoveHandler(token string) {
 	methods.DelWebhook(updater.apiwebsite, token)
 }
 
-// ListenAndServe 监听并服务
+// 监听并服务
 func (updater *Updater) ListenAndServe() error {
 	addr := fmt.Sprintf(":%d", updater.port)
 	s := &http.Server{

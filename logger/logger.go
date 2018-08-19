@@ -22,7 +22,7 @@ var (
 	DebugLevel = uint8(logrus.DebugLevel)
 )
 
-// CreateLoggerOnce 创建日志记录器
+// 创建日志记录器
 func CreateLoggerOnce(level, filelevel uint8) {
 	timestamp := time.Now().Unix()
 	tm := time.Unix(timestamp, 0)
@@ -41,84 +41,84 @@ func CreateLoggerOnce(level, filelevel uint8) {
 	})
 }
 
-// Debug 输出Debug日志
+// 输出Debug日志
 func Debug(v ...interface{}) {
 	if globalLogger != nil {
 		globalLogger.available(logrus.DebugLevel).Debug(v)
 	}
 }
 
-// Debugf 格式化输出Debug日志
+// 格式化输出Debug日志
 func Debugf(format string, params ...interface{}) {
 	if globalLogger != nil {
 		globalLogger.available(logrus.DebugLevel).Debugf(format, params...)
 	}
 }
 
-// Info 输出Info日志
+// 输出Info日志
 func Info(v ...interface{}) {
 	if globalLogger != nil {
 		globalLogger.available(logrus.InfoLevel).Info(v)
 	}
 }
 
-// Infof 格式化输出Info日志
+// 格式化输出Info日志
 func Infof(format string, params ...interface{}) {
 	if globalLogger != nil {
 		globalLogger.available(logrus.InfoLevel).Infof(format, params...)
 	}
 }
 
-// Warn 输出Warn日志
+// 输出Warn日志
 func Warn(v ...interface{}) {
 	if globalLogger != nil {
 		globalLogger.available(logrus.WarnLevel).Warn(v)
 	}
 }
 
-// Warnf 格式化输出Warn日志
+// 格式化输出Warn日志
 func Warnf(format string, params ...interface{}) {
 	if globalLogger != nil {
 		globalLogger.available(logrus.WarnLevel).Warnf(format, params...)
 	}
 }
 
-// Error 输出Error日志
+// 输出Error日志
 func Error(v ...interface{}) {
 	if globalLogger != nil {
 		globalLogger.available(logrus.ErrorLevel).Error(v)
 	}
 }
 
-// Errorf 格式化输出Error日志
+// 格式化输出Error日志
 func Errorf(format string, params ...interface{}) {
 	if globalLogger != nil {
 		globalLogger.available(logrus.ErrorLevel).Errorf(format, params...)
 	}
 }
 
-// Fatal 输出Fatal日志
+// 输出Fatal日志
 func Fatal(v ...interface{}) {
 	if globalLogger != nil {
 		globalLogger.available(logrus.FatalLevel).Fatal(v)
 	}
 }
 
-// Fatalf 格式化输出Fatal日志
+// 格式化输出Fatal日志
 func Fatalf(format string, params ...interface{}) {
 	if globalLogger != nil {
 		globalLogger.available(logrus.FatalLevel).Fatalf(format, params...)
 	}
 }
 
-// Panic 输出Panic日志
+// 输出Panic日志
 func Panic(v ...interface{}) {
 	if globalLogger != nil {
 		globalLogger.available(logrus.PanicLevel).Panic(v)
 	}
 }
 
-// Panicf 格式化输出Panic日志
+// 格式化输出Panic日志
 func Panicf(format string, params ...interface{}) {
 	if globalLogger != nil {
 		globalLogger.available(logrus.PanicLevel).Panicf(format, params...)

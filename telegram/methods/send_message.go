@@ -7,14 +7,14 @@ import (
 	"github.com/zhangpanyi/basebot/telegram/types"
 )
 
-// KeyboardButton 键盘按钮
+// 键盘按钮
 type KeyboardButton struct {
 	Text            string `json:"text"`                       // 按钮文本标签
 	RequestContact  bool   `json:"request_contact,omitempty"`  // 发送联系人信息
 	RequestLocation bool   `json:"request_location,omitempty"` // 发送位置信息
 }
 
-// ReplyKeyboardMarkup 回复键盘
+// 回复键盘
 type ReplyKeyboardMarkup struct {
 	Keyboard        [][]*KeyboardButton `json:"keyboard"`                    // 按钮列表
 	ResizeKeyboard  bool                `json:"resize_keyboard,omitempty"`   // 自动设置大小
@@ -22,7 +22,7 @@ type ReplyKeyboardMarkup struct {
 	Selective       bool                `json:"selective,omitempty"`         // 特定用户可见
 }
 
-// ToJSON 转换为
+// 转换为
 func (markup *ReplyKeyboardMarkup) ToJSON() ([]byte, error) {
 	jsb, err := json.Marshal(markup)
 	if err != nil {
@@ -31,7 +31,7 @@ func (markup *ReplyKeyboardMarkup) ToJSON() ([]byte, error) {
 	return jsb, nil
 }
 
-// MakeReplyKeyboardMarkup 生成回复键盘
+// 生成回复键盘
 func MakeReplyKeyboardMarkup(menus []KeyboardButton, columns ...int) *ReplyKeyboardMarkup {
 	offset := 0
 	replyKeyboardMarkup := ReplyKeyboardMarkup{
@@ -57,7 +57,7 @@ func MakeReplyKeyboardMarkup(menus []KeyboardButton, columns ...int) *ReplyKeybo
 	return &replyKeyboardMarkup
 }
 
-// MakeReplyKeyboardMarkupAuto 生成回复键盘(自动排版)
+// 生成回复键盘(自动排版)
 func MakeReplyKeyboardMarkupAuto(menus []KeyboardButton, columns uint) *ReplyKeyboardMarkup {
 	if len(menus) <= 0 || columns <= 0 {
 		return nil
@@ -85,13 +85,13 @@ func MakeReplyKeyboardMarkupAuto(menus []KeyboardButton, columns uint) *ReplyKey
 	return &replyKeyboardMarkup
 }
 
-// ReplyKeyboardRemove 删除回复键盘
+// 删除回复键盘
 type ReplyKeyboardRemove struct {
 	RemoveKeyboard bool `json:"remove_keyboard"`     // 删除键盘
 	Selective      bool `json:"selective,omitempty"` // 指定人可见
 }
 
-// ToJSON 转换为
+// 转换为
 func (markup *ReplyKeyboardRemove) ToJSON() ([]byte, error) {
 	jsb, err := json.Marshal(markup)
 	if err != nil {
@@ -100,7 +100,7 @@ func (markup *ReplyKeyboardRemove) ToJSON() ([]byte, error) {
 	return jsb, nil
 }
 
-// InlineKeyboardButton 内联键盘按钮
+// 内联键盘按钮
 type InlineKeyboardButton struct {
 	Text                         string `json:"text"`                                       // 按钮文本标签
 	URL                          string `json:"url,omitempty"`                              // 打开地址
@@ -109,12 +109,12 @@ type InlineKeyboardButton struct {
 	SwitchInlineQueryCurrentChat string `json:"switch_inline_query_current_chat,omitempty"` // 切换内联查询到当前聊天
 }
 
-// InlineKeyboardMarkup 内联键盘
+// 内联键盘
 type InlineKeyboardMarkup struct {
 	InlineKeyboard [][]*InlineKeyboardButton `json:"inline_keyboard"` // 按钮列表
 }
 
-// ToJSON 转换为
+// 转换为
 func (markup *InlineKeyboardMarkup) ToJSON() ([]byte, error) {
 	jsb, err := json.Marshal(markup)
 	if err != nil {
@@ -123,7 +123,7 @@ func (markup *InlineKeyboardMarkup) ToJSON() ([]byte, error) {
 	return jsb, nil
 }
 
-// Merge 合并内联键盘
+// 合并内联键盘
 func (markup *InlineKeyboardMarkup) Merge(args ...*InlineKeyboardMarkup) *InlineKeyboardMarkup {
 	for _, item := range args {
 		for _, rows := range item.InlineKeyboard {
@@ -133,7 +133,7 @@ func (markup *InlineKeyboardMarkup) Merge(args ...*InlineKeyboardMarkup) *Inline
 	return markup
 }
 
-// MakeInlineKeyboardMarkup 生成回调键盘
+// 生成回调键盘
 func MakeInlineKeyboardMarkup(menus []InlineKeyboardButton, columns ...int) *InlineKeyboardMarkup {
 	offset := 0
 	inlineKeyboardMarkup := InlineKeyboardMarkup{
@@ -157,7 +157,7 @@ func MakeInlineKeyboardMarkup(menus []InlineKeyboardButton, columns ...int) *Inl
 	return &inlineKeyboardMarkup
 }
 
-// MakeInlineKeyboardMarkupAuto 生成回调内联键盘(自动排版)
+// 生成回调内联键盘(自动排版)
 func MakeInlineKeyboardMarkupAuto(menus []InlineKeyboardButton, columns uint) *InlineKeyboardMarkup {
 	if len(menus) <= 0 || columns <= 0 {
 		return nil
@@ -190,9 +190,9 @@ func MakeInlineKeyboardMarkupAuto(menus []InlineKeyboardButton, columns uint) *I
 }
 
 const (
-	// ParseModeHTML 解析HTML
+	// 解析HTML
 	ParseModeHTML = "HTML"
-	// ParseModeMarkdown 解析Markdown
+	// 解析Markdown
 	ParseModeMarkdown = "Markdown"
 )
 
@@ -203,7 +203,7 @@ type sendMessage struct {
 	ParseMode             string      `json:"parse_mode,omitempty"`               // 解析模式
 	ReplyToMessageID      int32       `json:"reply_to_message_id,omitempty"`      // 回复消息ID
 	DisableWebPagePreview bool        `json:"disable_web_page_preview,omitempty"` // 禁用网页预览
-	ReplyMarkup           interface{} `json:"reply_markup,omitempty"`             // 回复标记
+	ReplyMarkup           interface{} `json:"reply_markup,omitempty"`             // Reply Markup
 }
 
 // 发送消息
@@ -221,7 +221,7 @@ func (bot *BotExt) sendMessage(request *sendMessage) (*types.Message, error) {
 	return resonpe.Result, nil
 }
 
-// SendMessage 发送消息
+// 发送消息
 func (bot *BotExt) SendMessage(chatID int64, text string, mdMode bool,
 	markup interface{}) (*types.Message, error) {
 	request := sendMessage{
@@ -238,7 +238,7 @@ func (bot *BotExt) SendMessage(chatID int64, text string, mdMode bool,
 	return bot.sendMessage(&request)
 }
 
-// ReplyMessage 回复消息
+// 回复消息
 func (bot *BotExt) ReplyMessage(message *types.Message, text string, mdMode bool,
 	markup interface{}) (*types.Message, error) {
 	request := sendMessage{
@@ -256,7 +256,7 @@ func (bot *BotExt) ReplyMessage(message *types.Message, text string, mdMode bool
 	return bot.sendMessage(&request)
 }
 
-// SendMessageDisableWebPagePreview 发送消息并禁用网页预览
+// 发送消息并禁用网页预览
 func (bot *BotExt) SendMessageDisableWebPagePreview(chatID int64, text string, mdMode bool,
 	markup interface{}) (*types.Message, error) {
 	request := sendMessage{
@@ -274,7 +274,7 @@ func (bot *BotExt) SendMessageDisableWebPagePreview(chatID int64, text string, m
 	return bot.sendMessage(&request)
 }
 
-// ReplyMessageDisableWebPagePreview 回复消息并禁用网页预览
+// 回复消息并禁用网页预览
 func (bot *BotExt) ReplyMessageDisableWebPagePreview(message *types.Message, text string, mdMode bool,
 	markup *InlineKeyboardMarkup) (*types.Message, error) {
 	request := sendMessage{

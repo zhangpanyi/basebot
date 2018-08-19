@@ -13,10 +13,10 @@ type sendPhoto struct {
 	Photo            string      `json:"photo"`                         // 文件ID
 	Caption          string      `json:"caption"`                       // 照片标题
 	ReplyToMessageID int32       `json:"reply_to_message_id,omitempty"` // 回复消息ID
-	ReplyMarkup      interface{} `json:"reply_markup,omitempty"`        // 回复标记
+	ReplyMarkup      interface{} `json:"reply_markup,omitempty"`        // Reply Markup
 }
 
-// SendPhoto 发送照片
+// 发送照片
 func (bot *BotExt) SendPhoto(chatID int64, caption string, fileID string,
 	markup *InlineKeyboardMarkup) (*types.Message, error) {
 
@@ -44,7 +44,7 @@ func (bot *BotExt) SendPhoto(chatID int64, caption string, fileID string,
 	return resonpe.Result, nil
 }
 
-// ReplyPhoto 回复照片
+// 回复照片
 func (bot *BotExt) ReplyPhoto(message *types.Message, caption string, fileID string,
 	markup *InlineKeyboardMarkup) (*types.Message, error) {
 
@@ -73,7 +73,7 @@ func (bot *BotExt) ReplyPhoto(message *types.Message, caption string, fileID str
 	return resonpe.Result, nil
 }
 
-// SendPhotoFile 发送照片文件
+// 发送照片文件
 func (bot *BotExt) SendPhotoFile(chatID int64, caption string, file []byte,
 	markup *InlineKeyboardMarkup) (*types.Message, error) {
 

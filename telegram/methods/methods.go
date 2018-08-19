@@ -14,7 +14,7 @@ import (
 	"github.com/zhangpanyi/basebot/telegram/types"
 )
 
-// Field 字段信息
+// 字段信息
 type Field struct {
 	Name     string // 字段名
 	Text     string // 文本
@@ -22,40 +22,40 @@ type Field struct {
 	FileName string // 文件名
 }
 
-// IsFile 是否文件
+// 是否文件
 func (f *Field) IsFile() bool {
 	return len(f.FileName) > 0 && f.File != nil
 }
 
-// Bot 机器人信息
+// 机器人信息
 type Bot struct {
 	ID        int64  `json:"id"`         // 机器人唯一ID
-	FirstName string `json:"first_name"` // 机器人First name
-	LastName  string `json:"last_name"`  // 机器人Last name
+	FirstName string `json:"first_name"` // name
+	LastName  string `json:"last_name"`  // name
 	UserName  string `json:"username"`   // 机器人用户名
 }
 
-// BotExt 机器人扩展信息
+// 机器人扩展信息
 type BotExt struct {
 	Bot
 	Token      string // 机器人Token
 	APIWebsite string // 机器人API网站
 }
 
-// ErrorResonpe 错误响应
+// 错误响应
 type ErrorResonpe struct {
 	OK          bool   `json:"ok"`          // 是否成功
 	ErrorCode   int32  `json:"error_code"`  // 错误代码
 	Description string `json:"description"` // 描述信息
 }
 
-// GetMeResonpe 获取信息响应
+// 获取信息响应
 type GetMeResonpe struct {
 	OK     bool `json:"ok"`     // 是否成功
 	Result *Bot `json:"result"` // 机器人信息
 }
 
-// SendMessageResonpe 发送消息响应
+// 发送消息响应
 type SendMessageResonpe struct {
 	OK     bool           `json:"ok"`     // 是否成功
 	Result *types.Message `json:"result"` // 消息内容
@@ -84,7 +84,7 @@ func (bot *BotExt) formatRespone(res *http.Response) ([]byte, error) {
 	return body, nil
 }
 
-// Call 调用方法
+// 调用方法
 func (bot *BotExt) Call(methodName string, request interface{}) ([]byte, error) {
 	jsb, err := json.Marshal(request)
 	if err != nil {
@@ -100,7 +100,7 @@ func (bot *BotExt) Call(methodName string, request interface{}) ([]byte, error) 
 	return bot.formatRespone(res)
 }
 
-// Upload 上传文件
+// 上传文件
 func (bot *BotExt) Upload(methodName string, formdata []Field) ([]byte, error) {
 	// 构造数据
 	var buf bytes.Buffer

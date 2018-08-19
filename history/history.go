@@ -7,10 +7,10 @@ import (
 	"github.com/zhangpanyi/basebot/telegram/types"
 )
 
-// DefaultCapacity 默认容量
+// 默认容量
 const DefaultCapacity = 16
 
-// History 历史记录
+// 历史记录
 type History struct {
 	size     int
 	capacity int
@@ -18,7 +18,7 @@ type History struct {
 	mutex    sync.RWMutex
 }
 
-// NewHistory 创建记录
+// 创建记录
 func NewHistory() *History {
 	return &History{
 		capacity: DefaultCapacity,
@@ -26,7 +26,7 @@ func NewHistory() *History {
 	}
 }
 
-// Clear 清空历史
+// 清空历史
 func (r *History) Clear() *History {
 	r.mutex.RLock()
 	defer func() {
@@ -36,7 +36,7 @@ func (r *History) Clear() *History {
 	return r
 }
 
-// Empty 是否为空
+// 是否为空
 func (r *History) Empty() bool {
 	r.mutex.RLock()
 	defer func() {
@@ -45,7 +45,7 @@ func (r *History) Empty() bool {
 	return r.size == 0
 }
 
-// Push 插入数据
+// 插入数据
 func (r *History) Push(update *types.Update) *History {
 	r.mutex.Lock()
 	defer func() {
@@ -62,7 +62,7 @@ func (r *History) Push(update *types.Update) *History {
 	return r
 }
 
-// Pop 擦除数据
+// 擦除数据
 func (r *History) Pop() *History {
 	r.mutex.Lock()
 	defer func() {
@@ -74,7 +74,7 @@ func (r *History) Pop() *History {
 	return r
 }
 
-// Back 最后元素
+// 最后元素
 func (r *History) Back() (*types.Update, error) {
 	r.mutex.RLock()
 	defer func() {
@@ -86,7 +86,7 @@ func (r *History) Back() (*types.Update, error) {
 	return nil, errors.New("not found")
 }
 
-// Foreach 遍历数据
+// 遍历数据
 func (r *History) Foreach(callback func(int, *types.Update) bool) {
 	r.mutex.RLock()
 	history := make([]*types.Update, r.size)
@@ -100,7 +100,7 @@ func (r *History) Foreach(callback func(int, *types.Update) bool) {
 	}
 }
 
-// LastCallbackQuery 最后的查询回调
+// 最后的查询回调
 func (r *History) LastCallbackQuery() (*types.CallbackQuery, error) {
 	r.mutex.RLock()
 	defer func() {

@@ -13,7 +13,7 @@ type answerCallbackQuery struct {
 	CacheTime       int32  `json:"cache_time,omitempty"` // 缓存时间
 }
 
-// AnswerCallbackQuery 应答查询回调
+// 应答查询回调
 func (bot *BotExt) AnswerCallbackQuery(query *types.CallbackQuery, text string, alert bool, url string, cacheTime int32) error {
 	request := answerCallbackQuery{
 		CallbackQueryID: query.ID,

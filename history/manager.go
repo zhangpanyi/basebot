@@ -6,12 +6,12 @@ import (
 	"github.com/zhangpanyi/basebot/hashdb"
 )
 
-// 记录管理器
+// 历史管理器
 type Manager struct {
 	db *hashdb.HashDatabase // 数据库
 }
 
-// 创建记录管理器
+// 创建历史管理器
 func NewManager(bucketNum uint32) (*Manager, error) {
 	db, err := hashdb.Create(bucketNum)
 	if err != nil {
@@ -20,12 +20,12 @@ func NewManager(bucketNum uint32) (*Manager, error) {
 	return &Manager{db: db}, nil
 }
 
-// 删除记录
+// 删除历史
 func (m *Manager) Del(userID uint32) {
 	m.db.Erase(userID)
 }
 
-// 获取记录
+// 获取历史
 func (m *Manager) Get(userID uint32) (*History, error) {
 	data, err := m.db.Find(userID)
 	if err != nil {

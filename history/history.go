@@ -45,7 +45,7 @@ func (r *History) Empty() bool {
 	return r.size == 0
 }
 
-// 插入数据
+// 插入历史
 func (r *History) Push(update *types.Update) *History {
 	r.mutex.Lock()
 	defer func() {
@@ -62,7 +62,7 @@ func (r *History) Push(update *types.Update) *History {
 	return r
 }
 
-// 擦除数据
+// 擦除历史
 func (r *History) Pop() *History {
 	r.mutex.Lock()
 	defer func() {
@@ -74,7 +74,7 @@ func (r *History) Pop() *History {
 	return r
 }
 
-// 最后元素
+// 最后历史
 func (r *History) Back() (*types.Update, error) {
 	r.mutex.RLock()
 	defer func() {
@@ -86,7 +86,7 @@ func (r *History) Back() (*types.Update, error) {
 	return nil, errors.New("not found")
 }
 
-// 遍历数据
+// 遍历历史
 func (r *History) Foreach(callback func(int, *types.Update) bool) {
 	r.mutex.RLock()
 	history := make([]*types.Update, r.size)
@@ -100,7 +100,7 @@ func (r *History) Foreach(callback func(int, *types.Update) bool) {
 	}
 }
 
-// 最后的查询回调
+// 最后的回调查询
 func (r *History) LastCallbackQuery() (*types.CallbackQuery, error) {
 	r.mutex.RLock()
 	defer func() {

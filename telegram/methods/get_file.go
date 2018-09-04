@@ -43,7 +43,7 @@ func (bot *BotExt) GetFile(fileID string) ([]byte, error) {
 	}
 
 	// 获取文件数据
-	a := [...]string{bot.APIWebsite, "file/bot", bot.Token, "/", res.Result.FilePath}
+	a := [...]string{bot.APIAccess, "file/bot", bot.Token, "/", res.Result.FilePath}
 	respone, err := http.Get(strings.Join(a[:], ""))
 	if err != nil {
 		return nil, err

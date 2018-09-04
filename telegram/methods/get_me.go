@@ -9,8 +9,8 @@ import (
 )
 
 // 获取机器人信息
-func GetMe(apiwebsite, token string) (*BotExt, error) {
-	res, err := http.Get(apiwebsite + "bot" + token + "/getme")
+func GetMe(apiaccess, token string) (*BotExt, error) {
+	res, err := http.Get(apiaccess + "bot" + token + "/getme")
 	if err != nil {
 		return nil, err
 	}
@@ -33,8 +33,8 @@ func GetMe(apiwebsite, token string) (*BotExt, error) {
 	}
 
 	return &BotExt{
-		Bot:        *resonpe.Result,
-		Token:      token,
-		APIWebsite: apiwebsite,
+		Bot:       *resonpe.Result,
+		Token:     token,
+		APIAccess: apiaccess,
 	}, nil
 }

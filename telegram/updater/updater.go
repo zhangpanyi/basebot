@@ -1,9 +1,9 @@
 package updater
 
 import (
-	"fmt"
 	"crypto/tls"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -28,16 +28,16 @@ func init() {
 }
 
 // 创建更新器
-func NewUpdater(port int, domain string, apiwebsite string) (*Updater, error) {
+func NewUpdater(port int, domain string, apiaccess string) (*Updater, error) {
 	certificate, err := ioutil.ReadFile("certs/server.crt")
 	if err != nil {
 		return nil, err
 	}
 
 	updater := Updater{
-		port: 		 port,
+		port:        port,
 		domain:      domain,
-		apiwebsite:  apiwebsite,
+		APIAccess:   apiaccess,
 		certificate: certificate,
 		router:      mux.NewRouter(),
 		queue:       NewQueue(1024),
@@ -59,7 +59,7 @@ type Handler func(bot *methods.BotExt, update *types.Update)
 type Updater struct {
 	domain        string                    // 服务域名
 	port          int                       // 监听端口号
-	apiwebsite    string                    // 机器人API服务网址
+	apiaccess     string                    // 机器人API服务网址
 	certificate   []byte                    // 证书信息
 	router        *mux.Router               // 路由器
 	bots          map[string]methods.BotExt // 机器人信息
@@ -78,7 +78,7 @@ func (updater *Updater) GetRouter() *mux.Router {
 // 添加处理模块
 func (updater *Updater) AddHandler(token string, handler Handler) (*methods.BotExt, error) {
 	// 获取机器人
-	bot, err := methods.GetMe(updater.apiwebsite, token)
+	bot, err := methods.GetMe(updater.apiaccess, token)
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +116,7 @@ func (updater *Updater) RemoveHandler(token string) {
 	updater.handlersMutex.Unlock()
 
 	// 删除webhook
-	methods.DelWebhook(updater.apiwebsite, token)
+	methods.DelWebhook(updater.apiaccess, token)
 }
 
 // 监听并服务

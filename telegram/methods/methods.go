@@ -38,8 +38,8 @@ type Bot struct {
 // 机器人扩展信息
 type BotExt struct {
 	Bot
-	Token      string // 机器人Token
-	APIWebsite string // 机器人API网站
+	Token     string // 机器人Token
+	APIAccess string // 机器人API网站
 }
 
 // 错误响应
@@ -92,7 +92,7 @@ func (bot *BotExt) Call(methodName string, request interface{}) ([]byte, error) 
 	}
 
 	reader := bytes.NewReader(jsb)
-	a := [...]string{bot.APIWebsite, "bot", bot.Token, "/", methodName}
+	a := [...]string{bot.APIAccess, "bot", bot.Token, "/", methodName}
 	res, err := http.Post(strings.Join(a[:], ""), "application/json", reader)
 	if err != nil {
 		return nil, err
@@ -129,7 +129,7 @@ func (bot *BotExt) Upload(methodName string, formdata []Field) ([]byte, error) {
 	w.Close()
 
 	// 执行请求
-	a := [...]string{bot.APIWebsite, "bot", bot.Token, "/", methodName}
+	a := [...]string{bot.APIAccess, "bot", bot.Token, "/", methodName}
 	req, err := http.NewRequest("POST", strings.Join(a[:], ""), &buf)
 	if err != nil {
 		return nil, err

@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-func DelWebhook(apiwebsite, token string) error {
-	a := [...]string{apiwebsite, "bot", token, "/", "deleteWebhook"}
+func DelWebhook(apiaccess, token string) error {
+	a := [...]string{apiaccess, "bot", token, "/", "deleteWebhook"}
 	res, err := http.Get(strings.Join(a[:], ""))
 	if err != nil {
 		return err

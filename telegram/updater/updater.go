@@ -37,7 +37,7 @@ func NewUpdater(port int, domain string, apiaccess string) (*Updater, error) {
 	updater := Updater{
 		port:        port,
 		domain:      domain,
-		APIAccess:   apiaccess,
+		apiaccess:   apiaccess,
 		certificate: certificate,
 		router:      mux.NewRouter(),
 		queue:       NewQueue(1024),
